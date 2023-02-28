@@ -7,7 +7,9 @@ body, html {
     background-color: black;
     animation: blinkingBackground 4s infinite;
   }
-  
+  #highscores {
+    list-style: none;
+  }
   .wrapper {
     width: 900px;
     margin: 0 auto;
@@ -24,6 +26,9 @@ body, html {
     color: rgb(228, 10, 10);
     text-align: center;
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+  }
+  #time {
+    color: red;
   }
   
   #quiz > h1 {
@@ -82,15 +87,18 @@ body, html {
     margin-left: 2px;
     margin-top: 2px;
   }
+  .hidden {
+    display: none;
+  }
   
   .false {
     background-color: #DC4437;
   }
 
-@keyframes blinkingBackground{
-    0% { background-color:rgb(228, 10, 10)}
+    //@keyframes blinkingBackground{
+    0% { background-color:rgb(142, 26, 219)}
     25% { background-color:aqua}
     50% {background-color: yellow}
     75% {background-color: greenyellow}
-    100% {background-color: orangered}
+    100% {background-color: rgb(42, 236, 24)}
 }
