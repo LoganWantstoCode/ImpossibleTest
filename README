@@ -1,0 +1,27 @@
+# IMPOSSIBLE TEST
+
+## Description
+
+This is the hardest test that you will ever take in your life. Nobody has ever passed it. Adventurer, will you be the first?
+
+## Installation
+N/A
+
+
+## Usage
+
+Click on potential answer, incorrect answers will highlight the number of the question in either red or green depending upon whether or not the answer is correct or incorrect. Save highscore at the end, and play again to see your name on the highscores list.   
+
+## Credits
+
+I used this template to start https://www.codehim.com/vanilla-javascript/javascript-multiple-choice-questions-code/ then adjusted thereafter, added a bunch of features like the timer, points, subtracting of time, flashing background, appended input bar for high scores, score page.
+
+## License
+
+Please refer to the LICENSE in the repo.
+
+
+
+## Features
+
+5 min timer that starts, subtracts a minute with every incorrect answer. Each question is worth one point. High scores that are saved to local storage and displayed the next session. 
