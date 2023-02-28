@@ -95,7 +95,7 @@ body, html {
     background-color: #DC4437;
   }
 
-    //@keyframes blinkingBackground{
+    @keyframes blinkingBackground{
     0% { background-color:rgb(142, 26, 219)}
     25% { background-color:aqua}
     50% {background-color: yellow}
