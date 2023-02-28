@@ -1,5 +1,34 @@
 window.onload = function () {
-  
+
+    let Correct = 0;
+    let minutes;
+    let seconds;
+    let startingMinutes = 5;
+    let time = startingMinutes * 60;
+    let RefreshButton = () => {
+      location.reload();
+    }
+    restartBtn.addEventListener("click", RefreshButton);
+
+    const countdownEl = document.querySelector("#timer");
+
+    let Interval = setInterval(updateCountdown, 1000);
+
+    function updateCountdown() {
+         minutes = Math.floor(time / 60);
+         seconds = time % 60;
+        if (minutes <= 0 && seconds <= 0) {
+            clearInterval(Interval);
+            minutes = 0;
+            seconds = 0;
+        }
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+
+        countdownEl.innerHTML = `${minutes}:${seconds}`;
+        time--;
+
+    }
+
     var questionArea = document.getElementsByClassName('questions')[0],
         answerArea   = document.getElementsByClassName('answers')[0],
         checker      = document.getElementsByClassName('checker')[0],
@@ -55,18 +84,22 @@ window.onload = function () {
     
     function checkAnswer(i, arr) {
       // This is the function that will run, when clicked on one of the answers
-      // Check if givenAnswer is sams as the correct one
-      // After this, check if it's the last question:
-      // If it is: empty the answerArea and let them know it's done.
+      // This will also reduce countdown timer and reload page if you lose
       
       return function () {
-        var givenAnswer = i,
+        let givenAnswer = i,
             correctAnswer = arr[arr.length-1];
         
         if (givenAnswer === correctAnswer) {
-          addChecker(true);             
+          addChecker(true); 
+          Correct++;            
         } else {
-          addChecker(false);                        
+          addChecker(false); 
+          time = time-60;
+          if (time < 0) {
+            alert('Failed... try again') 
+            location.reload();
+          }                       
         }
         
         if (current < Object.keys(allQuestions).length -1) {
@@ -75,16 +108,42 @@ window.onload = function () {
           loadQuestion(current);
           loadAnswers(current);
         } else {
-          questionArea.innerHTML = 'Result = Noob';
-          answerArea.innerHTML = '';
-        }
-                                
+          //CREATES THE INPUT FIELD FOR INITIALS and score and saves to local storage
+          questionArea.innerHTML = "Congrats! Your score is " + Correct + '! Enter Initials for leaderboard';
+          answerArea.innerHTML = "";
+          let createHiscore = document.createElement('Input');
+          createHiscore.setAttribute('type', 'text')
+          questionArea.append(createHiscore);
+          answerArea.innerHTML = 'Scores';
+          let Hiscorebtn = document.createElement('button');
+          let hiScores = JSON.parse (localStorage.getItem("scores")) || [];
+          Hiscorebtn.addEventListener('click', function(){
+            let score = {score:Correct, initials:createHiscore.value}
+            hiScores.push(score);
+          localStorage.setItem("scores", JSON.stringify (hiScores));
+
+        })
+        document.getElementById("scores").classList.remove("hidden")
+          Hiscorebtn.innerText = 'Submit';
+          questionArea.append(Hiscorebtn);
+          displayScores();
+          }
+        }                       
       };
+      function displayScores() {
+        let hiScores =JSON.parse (localStorage.getItem("scores")) || [];
+        hiScores.sort(function(a, b){
+          return b.score - a.score;
+        })
+        for (let i=0; i < hiScores.length; i++) { 
+          let liTag = document.createElement ("li");
+          liTag.textContent = i+1+". "+ hiScores[i].initials + " - " + hiScores[i].score;
+          document.getElementById("highscores").append(liTag);
+      }
     }
-    
+      
     function addChecker(bool) {
-    // This function adds a div element to the page
-    // Used to see if it was correct or false
+    // This function uses red or green markers to mark true or false
     
       var createDiv = document.createElement('div'),
           txt       = document.createTextNode(current + 1);
@@ -101,8 +160,7 @@ window.onload = function () {
       }
     }
     
-    
-    // Start the quiz right away
+    // Start the right away
     loadQuestion(current);
     loadAnswers(current);
     
