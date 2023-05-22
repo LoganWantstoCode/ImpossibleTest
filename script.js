@@ -27,13 +27,11 @@ window.onload = function () {
     time--;
   }
 
-  var questionArea = document.getElementsByClassName("questions")[0],
-    answerArea = document.getElementsByClassName("answers")[0],
+  var questionZone = document.getElementsByClassName("questions")[0],
+    answerZone = document.getElementsByClassName("answers")[0],
     checker = document.getElementsByClassName("checker")[0],
     current = 0,
-    // An object that holds all the questions + possible answers.
-    // In the array --> last digit gives the right answer position
-    allQuestions = {
+    allQ = {
       "What is RNG?": ["RNG", "RNG", "RNG", "RNG", 1],
 
       "What is a noob?": ["A chicken nugget", "Apple Sauce", "A noob", 2],
@@ -70,24 +68,17 @@ window.onload = function () {
       ],
     };
 
-  function loadQuestion(curr) {
-    // This function loads all the question into the questionArea
-    // It grabs the current question based on the 'current'-variable
+  function loadNext(curr) {
+    var question = Object.keys(allQ)[curr];
 
-    var question = Object.keys(allQuestions)[curr];
-
-    questionArea.innerHTML = "";
-    questionArea.innerHTML = question;
+    questionZone.innerHTML = "";
+    questionZone.innerHTML = question;
   }
 
-  function loadAnswers(curr) {
-    // This function loads all the possible answers of the given question
-    // It grabs the needed answer-array with the help of the current-variable
-    // Every answer is added with an 'onclick'-function
+  function loadResult(curr) {
+    var answers = allQ[Object.keys(allQ)[curr]];
 
-    var answers = allQuestions[Object.keys(allQuestions)[curr]];
-
-    answerArea.innerHTML = "";
+    answerZone.innerHTML = "";
 
     for (var i = 0; i < answers.length - 1; i += 1) {
       var createDiv = document.createElement("div"),
@@ -96,14 +87,11 @@ window.onload = function () {
       createDiv.appendChild(text);
       createDiv.addEventListener("click", checkAnswer(i, answers));
 
-      answerArea.appendChild(createDiv);
+      answerZone.appendChild(createDiv);
     }
   }
 
   function checkAnswer(i, arr) {
-    // This is the function that will run, when clicked on one of the answers
-    // This will also reduce countdown timer and reload page if you lose
-
     return function () {
       let givenAnswer = i,
         correctAnswer = arr[arr.length - 1];
@@ -120,21 +108,21 @@ window.onload = function () {
         }
       }
 
-      if (current < Object.keys(allQuestions).length - 1) {
+      if (current < Object.keys(allQ).length - 1) {
         current += 1;
 
-        loadQuestion(current);
-        loadAnswers(current);
+        loadNext(current);
+        loadResult(current);
       } else {
-        questionArea.innerHTML =
+        questionZone.innerHTML =
           "Congrats! Your score is " +
           Correct +
           "! Enter Initials for leaderboard";
-        answerArea.innerHTML = "";
+        answerZone.innerHTML = "";
         let createHiscore = document.createElement("Input");
         createHiscore.setAttribute("type", "text");
-        questionArea.append(createHiscore);
-        answerArea.innerHTML = "Scores";
+        questionZone.append(createHiscore);
+        answerZone.innerHTML = "Scores";
         let Hiscorebtn = document.createElement("button");
         let hiScores = JSON.parse(localStorage.getItem("scores")) || [];
         Hiscorebtn.addEventListener("click", function () {
@@ -144,7 +132,7 @@ window.onload = function () {
         });
         document.getElementById("scores").classList.remove("hidden");
         Hiscorebtn.innerText = "Submit";
-        questionArea.append(Hiscorebtn);
+        questionZone.append(Hiscorebtn);
         displayScores();
       }
     };
@@ -163,8 +151,6 @@ window.onload = function () {
   }
 
   function addChecker(bool) {
-    // This function uses red or green markers to mark true or false
-
     var createDiv = document.createElement("div"),
       txt = document.createTextNode(current + 1);
 
@@ -178,8 +164,6 @@ window.onload = function () {
       checker.appendChild(createDiv);
     }
   }
-
-  // Start the right away
-  loadQuestion(current);
-  loadAnswers(current);
+  loadNext(current);
+  loadResult(current);
 };
